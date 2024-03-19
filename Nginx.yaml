@@ -1,0 +1,22 @@
+---
+- name: Install NGINX on Ubuntu
+  hosts: Application_Servers
+  become: yes  # Run tasks with sudo privileges
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'  # Only update cache on Debian-based systems
+
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == 'Debian'  # Install NGINX only on Debian-based systems
+
+    - name: Start NGINX service
+      service:
+        name: nginx
+        state: started
+        enabled: yes  # Ensure NGINX starts on system boot
